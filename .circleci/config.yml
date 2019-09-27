@@ -24,4 +24,16 @@ jobs:
           command: find . -type f -name "*.java" -print | xargs javac -cp antlr-4.7.2-complete.jar
       - run:
           name: Parse Test Spthy
-          command: java -cp antlr-4.7.2-complete.jar:out/ org.antlr.v4.gui.TestRig Tamarin theory tendermint_subgroups.spthy
+          command: java -cp antlr-4.7.2-complete.jar:out/ org.antlr.v4.gui.TestRig Tamarin theory -ps tree.ps tendermint_subgroups.spthy > messages.txt
+      - run:
+          name: Parse Test Spthy with Diagnostics
+          command: java -cp antlr-4.7.2-complete.jar:out/ org.antlr.v4.gui.TestRig Tamarin theory -diagnostics tendermint_subgroups.spthy > diagnostics.txt
+      - store_artifacts:
+          path: tree.ps
+          destination: tree
+      - store_artifacts:
+          path: messages.txt
+          destination: messages
+      - store_artifacts:
+          path: diagnostics.txt
+          destination: diagnostics
