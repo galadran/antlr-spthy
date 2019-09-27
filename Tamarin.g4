@@ -231,6 +231,7 @@ xorterm : multterm
 // If diffie-hellman is not enabled, this only allows the first case
 multterm : term
     | term '*' term
+    | term '^' term
     ;
 
 //Modified to remove nullaryApp
