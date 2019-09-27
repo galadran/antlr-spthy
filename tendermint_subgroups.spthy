@@ -1,0 +1,113 @@
+/*
+ *  Author:
+ *  Model Name: main.spthy
+ *  Status: DEVELOPMENTAL
+ *
+ *  Comments:
+ */
+
+theory test begin
+
+builtins: diffie-hellman,signing,hashing,symmetric-encryption
+
+/*
+
+
+*/
+
+functions: element/3, extractelement/1
+equations: extractelement(element(t,s,n)) = n
+
+restriction Consistency:
+	"All  t,s,r1,r2,y,#i,#j .
+	Raised(t,s,r1,y) @ i & Raised(t,s,r2,y) @j
+	==> r1 = r2"
+
+restriction Identity:
+	"All  t,r,y,#i .
+	Raised(t,grpid,r,y) @ i ==> r = grpid"
+
+rule setup:
+	let
+		pubkey = pk(~s)
+	in
+	[Fr(~id),Fr(~s)]
+	--[Honest(pubkey)]->
+	[!Role(~id,~s), !Cert(~id,pubkey),Out(pubkey)]
+
+rule advsetup: //Proof of posessesion check
+	[Fr(~id),In(sk)]
+	--[Dishonest(pk(sk))]->
+	[!Cert(~id,pk(sk))]
+
+rule Init1:
+	let
+		iDH = element('C',grpid,'g'^~x)
+	in
+	[!Role(~id,~st),!Cert(~resp,rPk),Fr(~x)]
+	-->
+	[Out(iDH),SessionI1(~id,rPk,~x)]
+
+rule Resp1:
+	let
+		eDH = element(t,s,n)
+		rDH= element('C',grpid,'g'^~y)
+		key = element(t,r,n^~y)
+	in
+	[!Role(~id,~st),!Cert(~init,iPk),Fr(~y),In(eDH),In(r)]
+	--[Raised(t,s,r,~y)]->
+	[Out(rDH),SessionR1(~id,iPk,key)]
+
+rule Init2:
+	let
+		eDH = element(t,su,n)
+		key = element(t,r,n^~x)
+		sig = sign(h(<'I',key>),~s)
+		iPk = pk(~s)
+		ct =  senc(<iPk,sig>,key)
+	in
+	[!Role(~id,~s),In(eDH),SessionI1(~id,rPk,~x),In(r)]
+	--[Raised(t,su,r,~x)]->
+	[SessionI2(~id,rPk,key),Out(ct)]
+
+rule Resp2:
+	let
+		sm = h(<'I',key>)
+		rPk = pk(~s)
+		incct =senc(<iPk,sig>,key)
+		outct = senc(<rPk,sign(h(<'R',key>),~s)>,key)
+	in
+	[!Role(~id,~s),In(incct),SessionR1(~id,iPk,key)]
+	--[Eq(verify(sig,sm,iPk),true),RFinish(iPk,rPk,key)]->
+	[Out(outct)]
+
+rule Init3:
+	let
+		ct = senc(<rPk,sig>,key)
+		iPk = pk(~s)
+	in
+	[!Role(~id,~s),In(ct),SessionI2(~id,rPk,key)]
+	--[Eq(verify(sig,h(<'R',key>),rPk),true),IFinish(iPk,rPk,key)]->
+	[]
+
+restriction Equality:
+	"All x y #i . Eq(x,y) @ i ==> x = y"
+
+lemma weakfunctional:
+	exists-trace
+	"Ex i r k #i #j . IFinish(i,r,k) @ i & RFinish(i,r,k) @ j"
+
+lemma strongfunctional:
+	exists-trace
+	"Ex i r k #i #j #k #l  . Honest(r) @ l & Honest(i)@ k & IFinish(i,r,k) @ i & RFinish(i,r,k) @ j"
+
+lemma initkeysecret:
+	"All i r k #i #j #k . Honest(i) @ i & Honest(r) @ j & IFinish(i,r,k) @ k
+	==>
+	(not Ex #l . K(k) @ l)"
+
+lemma respkeysecret:
+	"All i r k #i #j #k . Honest(i) @ i & Honest(r) @ j & RFinish(i,r,k) @ k
+	==>
+	(not Ex #l . K(k) @ l)"
+end
