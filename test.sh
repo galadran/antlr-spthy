@@ -1,4 +1,3 @@
-
 rm -r out
 /opt/antlr -o out Tamarin.g4
 cd out
