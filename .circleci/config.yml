@@ -21,7 +21,7 @@ jobs:
           command: cd out
       - run:
           name: Compile Java Output 
-          command: find . -type f -name "*.java" -print | xargs javac
+          command: find . -type f -name "*.java" -print | xargs javac -cp ../antlr-4.7.2-complete.jar
       - run:
           name: Parse Test Spthy
           command: java org.antlr.v4.gui.TestRig Tamarin theory ../tendermint_subgroups.spthy
