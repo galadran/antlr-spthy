@@ -2,15 +2,19 @@ version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: circleci/openjdk:stretch
 
     steps:
       - checkout
 
       - run:
-          name: Greeting
+          name: Setup Environment
+          command: ... 
+        
+      - run:
+          name: Build Parser 
           command: echo Hello, world.
 
       - run:
-          name: Print the Current Time
+          name: Test Spthy
           command: date
