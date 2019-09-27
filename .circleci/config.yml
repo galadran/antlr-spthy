@@ -8,13 +8,20 @@ jobs:
       - checkout
 
       - run:
-          name: Setup Environment
-          command: ... 
-        
+          name: Fetch ANTLR Complete
+          command: wget https://www.antlr.org/download/antlr-4.7.2-complete.jar
       - run:
-          name: Build Parser 
-          command: echo Hello, world.
-
+          name: Ensure ANTLR JAR is executable
+          command: chmod +x antlr-4.7.2-complete.jar
       - run:
-          name: Test Spthy
-          command: date
+          name: Compile Grammar
+          command: ./antlr-4.7.2-complete.jar -o out Tamarin.g4
+      - run:
+          name: Change to output directory
+          command: cd out
+      - run:
+          name: Compile Java Output 
+          command: javac Tamarin*.java
+      - run:
+          name: Parse Test Spthy
+          command: java org.antlr.v4.gui.TestRig Tamarin theory ../tendermint_subgroups.spthy
