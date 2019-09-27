@@ -24,7 +24,7 @@ jobs:
           command: unset CLASSPATH
       - run:
           name: Compile Java Output 
-          command: find . -type f -name "*.java" -print | xargs javac -cp ../antlr-4.7.2-complete.jar
+          command: find . -type f -name "*.java" -print | xargs javac -cp antlr-4.7.2-complete.jar
       - run:
           name: Parse Test Spthy
           command: java -cp ../antlr-4.7.2-complete.jar org.antlr.v4.gui.TestRig Tamarin theory ../tendermint_subgroups.spthy
