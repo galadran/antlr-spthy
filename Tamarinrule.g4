@@ -28,14 +28,10 @@ fact :  factIdentifier '(' termList ')';
 
 factList : (fact (',' fact)*)?;
 
-dhterm : term '^' term;
-
 term : '<' termList '>'
      | term '^' term
      | varIdentifier
      | Identifier '(' termList  ')';
-
-
 
 termList : (term (',' term)*)?;
 
