@@ -4,7 +4,7 @@ import sys
 from antlr4 import *
 from out.TamarinruleLexer import TamarinruleLexer
 from out.TamarinruleParser import TamarinruleParser
-from out.TamarinruleVisitor import TamarinruleVisitor
+from letSubstitution import TamarinruleVisitor
 
 def main(argv):
 	input_stream = FileStream(argv[1])
