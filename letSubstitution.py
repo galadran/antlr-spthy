@@ -8,10 +8,8 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by TamarinruleParser#rules.
     def visitRules(self, ctx:TamarinruleParser.RulesContext):
-        self.newText = ""
         r = self.visitChildren(ctx)
-        return self.newText 
-
+        return ctx.getText()
 
     # Visit a parse tree produced by TamarinruleParser#protoRule.
     def visitProtoRule(self, ctx:TamarinruleParser.ProtoRuleContext):
@@ -21,12 +19,14 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by TamarinruleParser#letBlock.
     def visitLetBlock(self, ctx:TamarinruleParser.LetBlockContext):
-        return self.visitChildren(ctx)
+        r = self.visitChildren(ctx)
+        ctx.children =[]
+        return r
 
 
     # Visit a parse tree produced by TamarinruleParser#definition.
     def visitDefinition(self, ctx:TamarinruleParser.DefinitionContext):
-        self.substitutions[ctx.getChild(0).getText()] = ctx.getChild(2).getText()
+        self.substitutions[ctx.getChild(0).getText()] = ctx.getChild(2)
         return self.visitChildren(ctx)
 
 
@@ -47,6 +47,13 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by TamarinruleParser#term.
     def visitTerm(self, ctx:TamarinruleParser.TermContext):
+        newList = []
+        for c in ctx.children:
+            if c.getText() in self.substitutions.keys():
+                newList.append(self.substitutions[c.getText()])
+            else:
+                newList.append(c)
+        ctx.children = newList
         return self.visitChildren(ctx)
 
 
