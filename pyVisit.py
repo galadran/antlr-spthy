@@ -2,12 +2,11 @@
 
 import sys
 from antlr4 import *
-from out.TamarinruleLexer import TamarinruleLexer
-from out.TamarinruleParser import TamarinruleParser
+from TamarinruleLexer import TamarinruleLexer
+from TamarinruleParser import TamarinruleParser
 from letSubstitution import TamarinruleVisitor
 
-def main(argv):
-	input_stream = FileStream(argv[1])
+def makeTree(input_stream):
 	lexer = TamarinruleLexer(input_stream)
 	stream = CommonTokenStream(lexer)
 	parser = TamarinruleParser(stream)
@@ -15,7 +14,16 @@ def main(argv):
 	return tree 
 
 if __name__ == '__main__':
-	t = main(sys.argv)
+	f = FileStream(sys.argv[1])
+	t = makeTree(f)
 	v = TamarinruleVisitor()
-	r = v.visit(t)
-	print(r)
+	r1 = v.visit(t)
+	print(r1)
+
+	i = InputStream(r1)
+	t = makeTree(i)
+	v = TamarinruleVisitor()
+	r2 = v.visit(t)
+	print(r2)
+
+	assert(r1 == r2)

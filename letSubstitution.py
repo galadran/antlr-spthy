@@ -1,6 +1,6 @@
 # Generated from Tamarinrule.g4 by ANTLR 4.7.2
 from antlr4 import *
-from out.TamarinruleParser import TamarinruleParser
+from TamarinruleParser import TamarinruleParser
 
 # This class defines a complete generic visitor for a parse tree produced by TamarinruleParser.
 
@@ -23,12 +23,10 @@ class TamarinruleVisitor(ParseTreeVisitor):
         ctx.children =[]
         return r
 
-
     # Visit a parse tree produced by TamarinruleParser#definition.
     def visitDefinition(self, ctx:TamarinruleParser.DefinitionContext):
         self.substitutions[ctx.getChild(0).getText()] = ctx.getChild(2)
         return self.visitChildren(ctx)
-
 
     # Visit a parse tree produced by TamarinruleParser#genericRule.
     def visitGenericRule(self, ctx:TamarinruleParser.GenericRuleContext):

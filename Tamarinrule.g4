@@ -56,7 +56,7 @@ LetterNum : (Letter | Digit);
 // Whitespace and comments
 //
 
-WS: ( '\t' | ' ' | '\r' | '\n' | '\u000C' )+    -> skip ;
+WS: ( '\t' | ' ' | '\r' | '\n' | '\u000C' )+    -> channel(HIDDEN) ;
 
 //COMMA : ',' -> skip;
 
