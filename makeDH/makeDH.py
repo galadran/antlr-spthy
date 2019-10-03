@@ -8,10 +8,6 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by TamarinruleParser#rules.
     def visitRules(self, ctx:TamarinruleParser.RulesContext):
-        self.substitutions = dict()
-        r = self.visitChildren(ctx)
-        for k,v in self.substitutions.items():
-            print(k.getText() + " " + v)
         return ctx.getText()
 
     # Visit a parse tree produced by TamarinruleParser#protoRule.
