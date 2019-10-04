@@ -654,7 +654,8 @@ class TamarinruleParser ( Parser ):
                 o = self.getText(transform=False)
                 r = transformTerm(self)
                 if 'element' in r :
-                    print(o + ' -> ' + r)
+                    pass
+                    #print(o + ' -> ' + r)
                 else:
                     assert(o == r)
                 return r

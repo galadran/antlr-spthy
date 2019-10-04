@@ -1,3 +1,5 @@
+from io import StringIO
+
 def getChildText(ctx,i):
         if type(ctx.getChild(i)) == type(ctx):
             t = ctx.getChild(i).getText(transform=False)
@@ -67,4 +69,10 @@ def transformTerm(ctx):
                 base = ctx.getChild(0)
                 if isAtomic(base):
                     return makeVarElement(base) + getChildText(ctx,1) + getChildText(ctx,2) 
-    return ctx.getText(transform=False)
+    with StringIO() as builder:
+        for child in ctx.getChildren():
+            if type(child) == type(ctx):
+                builder.write(child.getText(transform=True))
+            else:
+                builder.write(child.getText())
+        return builder.getvalue()
