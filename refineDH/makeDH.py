@@ -8,6 +8,8 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by TamarinruleParser#rules.
     def visitRules(self, ctx:TamarinruleParser.RulesContext):
+        ctx.parser.substitutions = dict()
+        self.visitChildren(ctx)
         return ctx.getText()
 
     # Visit a parse tree produced by TamarinruleParser#protoRule.
@@ -24,7 +26,14 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by TamarinruleParser#genericRule.
     def visitGenericRule(self, ctx:TamarinruleParser.GenericRuleContext):
-        return self.visitChildren(ctx)
+        self.currentRule = ctx.getSourceInterval()
+        ctx.parser.substitutions[self.currentRule] = set()
+        #TODO Needs to be unique rule identifier
+        r = self.visitChildren(ctx)
+        self.currentRule = None
+        #print(ctx.parser.substitutions)
+        #TODO Have GetText use this?
+        return r
 
 
     # Visit a parse tree produced by TamarinruleParser#fact.
@@ -39,7 +48,65 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by TamarinruleParser#term.
     def visitTerm(self, ctx:TamarinruleParser.TermContext):
-        return self.visitChildren(ctx)
+        def extractTerms(c):
+            c = c.getChild(0)
+            assert(c.getChild(0).getText()=='element')
+            advVar = c.getChild(2).getChild(2)
+            base = c.getChild(2).getChild(4)
+            return advVar,base
+
+        def extractExponent(c):
+            return c.getChild(2)
+
+        def isElementExpSite(c):
+            if c.getChildCount() <= 1:
+                return False 
+            if c.getChild(1).getText() != '^':
+                return False
+            if c.getChild(0).getChild(0).getText() != 'element':
+                return False
+            return True 
+
+        def clean(t):
+            return t.replace('~',"sF").replace('$',"sC").replace("'",'sP')
+
+        def isTermAtomic(c):
+            return c.getChild(0).getText()[0] in ["'","~","$"]
+
+        def getNewAdvVar(av,e):
+            return clean(av.getText() + '_' + e.getText())
+
+        def getNewBase(b,e):
+            return clean(b.getText() + '_' + e.getText())
+
+
+        if isElementExpSite(ctx):
+
+            k = ctx.getSourceInterval()
+            if k not in ctx.parser.substitutions.keys():
+                ctx.parser.substitutions[k] = ""
+            # We are the base. Child 0 = Base. Child 2 = Exponent.
+            advVar,base = extractTerms(ctx)
+            exp = extractExponent(ctx)
+            if isTermAtomic(exp):
+                print("Handling exponentiation")
+                NadvVar = getNewAdvVar(advVar,exp)
+                Nbase = base.getText() + '^'+exp.getText()
+                ctx.parser.substitutions[self.currentRule].add(
+                    ('G',
+                    advVar.getText(),
+                    NadvVar,
+                    exp.getText(),
+                    Nbase))
+                ctx.parser.substitutions[k] = "element('G',"+NadvVar+','+Nbase+')'
+            else:
+                #Move the exponent inside and rename the variables
+                NadvVar = getNewAdvVar(advVar,exp)
+                Nbase = getNewBase(base,exp)
+                ctx.parser.substitutions[k] = "element('G',"+NadvVar+','+Nbase+')'
+        else:
+            # Don't descent if we did a substitution here. 
+            return self.visitChildren(ctx)
 
     # Visit a parse tree produced by TamarinruleParser#termList.
     def visitTermList(self, ctx:TamarinruleParser.TermListContext):

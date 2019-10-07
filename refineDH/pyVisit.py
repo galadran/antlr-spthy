@@ -13,9 +13,17 @@ def makeTree(input_stream):
 	tree = parser.rules()
 	return tree 
 
-if __name__ == '__main__':
-	f = FileStream(sys.argv[1])
+def makeTransform(f):
 	t = makeTree(f)
 	v = TamarinruleVisitor()
 	r1 = v.visit(t)
-	print(r1)
+	return r1
+
+if __name__ == '__main__':
+	old = ''
+	new = makeTransform(FileStream(sys.argv[1]))
+	while old != new:
+		print(new)
+		input()
+		old = new 
+		new = makeTransform(InputStream(old))
