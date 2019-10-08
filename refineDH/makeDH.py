@@ -89,7 +89,6 @@ class TamarinruleVisitor(ParseTreeVisitor):
             advVar,base = extractTerms(ctx)
             exp = extractExponent(ctx)
             if isTermAtomic(exp):
-                print("Handling exponentiation")
                 NadvVar = getNewAdvVar(advVar,exp)
                 Nbase = base.getText() + '^'+exp.getText()
                 ctx.parser.substitutions[self.currentRule].add(

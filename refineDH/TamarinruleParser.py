@@ -449,14 +449,23 @@ class TamarinruleParser ( Parser ):
                     return ""
                 with StringIO() as builder:
                     prev = None 
-                    state = None 
+                    state = None
+                    flip = False
                     #TODO This might be buggy when certain fact lists are missing.
                     for child in self.getChildren():
+                        print(child.getText())
                         if ']' in child.getText():
                             state, r = amendList(state,prev,subs)
                             builder.write(r)
+                        o = child.getText()
+                        if flip:
+                            o = ']->' + o 
+                            flip = False
+                        if '-->' in o:
+                            o = '--['
+                            flip = True 
                         prev = child 
-                        builder.write(child.getText())
+                        builder.write(o)
                     builder.write("\n")
                     return builder.getvalue().replace("[,","[")   
             else:

@@ -23,7 +23,6 @@ if __name__ == '__main__':
 	old = ''
 	new = makeTransform(FileStream(sys.argv[1]))
 	while old != new:
-		print(new)
-		input()
 		old = new 
 		new = makeTransform(InputStream(old))
+	print(new)
