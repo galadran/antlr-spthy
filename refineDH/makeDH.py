@@ -1,6 +1,6 @@
 # Generated from Tamarinrule.g4 by ANTLR 4.7.2
 from antlr4 import *
-from TamarinruleParser import TamarinruleParser
+from .TamarinruleParser import TamarinruleParser
 
 # This class defines a complete generic visitor for a parse tree produced by TamarinruleParser.
 

@@ -2,9 +2,9 @@
 
 import sys
 from antlr4 import *
-from TamarinruleLexer import TamarinruleLexer
-from TamarinruleParser import TamarinruleParser
-from makeDH import TamarinruleVisitor
+from .TamarinruleLexer import TamarinruleLexer
+from .TamarinruleParser import TamarinruleParser
+from .makeDH import TamarinruleVisitor
 
 def makeTree(input_stream):
 	lexer = TamarinruleLexer(input_stream)
@@ -19,10 +19,18 @@ def makeTransform(f):
 	r1 = v.visit(t)
 	return r1
 
-if __name__ == '__main__':
+def run(stream):
 	old = ''
-	new = makeTransform(FileStream(sys.argv[1]))
+	new = stream
+	i = 0 
 	while old != new:
 		old = new 
-		new = makeTransform(InputStream(old))
-	print(new)
+		new = InputStream(makeTransform(old))
+		i += 1 
+		if i > 10:
+			print("Error, loop limit reached whilst converting")
+			exit(-1)
+	return new
+
+if __name__ == '__main__':
+	print(run(FileStream(sys.argv[1])))

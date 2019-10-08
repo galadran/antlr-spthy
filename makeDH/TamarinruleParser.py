@@ -650,7 +650,7 @@ class TamarinruleParser ( Parser ):
                             builder.write(child.getText())
                     return builder.getvalue()
             if transform:
-                from transformElements import transformTerm
+                from .transformElements import transformTerm
                 o = self.getText(transform=False)
                 r = transformTerm(self)
                 if 'element' in r :

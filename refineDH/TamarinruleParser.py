@@ -453,7 +453,6 @@ class TamarinruleParser ( Parser ):
                     flip = False
                     #TODO This might be buggy when certain fact lists are missing.
                     for child in self.getChildren():
-                        print(child.getText())
                         if ']' in child.getText():
                             state, r = amendList(state,prev,subs)
                             builder.write(r)
