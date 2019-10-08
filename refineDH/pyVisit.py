@@ -23,8 +23,8 @@ def run(stream):
 	old = ''
 	new = stream
 	i = 0 
-	while old != new:
-		old = new 
+	while str(old) != str(new):
+		old = new
 		new = InputStream(makeTransform(old))
 		i += 1 
 		if i > 10:
