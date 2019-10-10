@@ -20,38 +20,41 @@ def handleComments(s,i,limit):
 			i += 1
 	return (pt,i)
 
-s = open(sys.argv[1],'r').read()
-
-pt = ''
-first = True
-rules = ''
-i = 0
-limit = len(s)
-s += '\n\n\n\n'
-while i < limit:
-	ptc, i = handleComments(s,i,limit)
-	pt = pt + ptc 
-	if s[i:i+4] == 'rule':
-		count = 0
-		while count < 3:
-			if s[i] == ']':
-				count += 1
-			elif s[i:i+3] == '-->':
-				count += 1
-			if first:
-				first = False
-				pt = pt + '\n RULESUBHERE \n'
-			ptc, i = handleComments(s,i,limit)
-			# Throwing away comments in rules
-			rules += s[i]
+def extractRules(s):
+	pt = ''
+	first = True
+	rules = ''
+	i = 0
+	limit = len(s)
+	s += '\n\n\n\n'
+	while i < limit:
+		ptc, i = handleComments(s,i,limit)
+		pt = pt + ptc 
+		if s[i:i+4] == 'rule':
+			count = 0
+			while count < 3:
+				if s[i] == ']':
+					count += 1
+				elif s[i:i+3] == '-->':
+					count += 1
+				if first:
+					first = False
+					pt = pt + '\n RULESUBHERE \n'
+				ptc, i = handleComments(s,i,limit)
+				# Throwing away comments in rules
+				rules += s[i]
+				i += 1
+			rules += '\n\n'
+		else:
+			pt += s[i]
 			i += 1
-		rules += '\n\n'
-	else:
-		pt += s[i]
-		i += 1
+	return (pt,rules)
 
-print(pt)
-print('###')
-print(rules)
+if __name__ == '__main__':
+	s = open(sys.argv[1],'r').read()
+	pt,rules = extractRules(s)
+	print(pt)
+	print('###')
+	print(rules)
 
 
