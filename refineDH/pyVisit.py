@@ -28,7 +28,6 @@ def run(stream):
 	while str(old) != str(new):
 		old = new
 		new = InputStream(makeTransform(old))
-		print(new)
 		i += 1 
 		if i > 10:
 			print("Error, loop limit reached whilst converting")

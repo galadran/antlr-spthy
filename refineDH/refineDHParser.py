@@ -17,24 +17,14 @@ def protoOverride(self):
 TamarinruleParser.ProtoRuleContext.getText = protoOverride
 
 def termOverride(self,transform=True):
-    if not transform:
-        with StringIO() as builder:
-            for child in self.getChildren():
-                if type(child) == type(self):
-                    builder.write(child.getText(transform=False))
-                else:
+            if self.getSourceInterval() in self.parser.substitutions.keys():
+                return self.parser.substitutions[self.getSourceInterval()]
+            if self.getChildCount() == 0:
+                return ""
+            with StringIO() as builder:
+                for child in self.getChildren():
                     builder.write(child.getText())
-            return builder.getvalue()
-    if transform:
-        from .transformElements import transformTerm
-        o = self.getText(transform=False)
-        r = transformTerm(self)
-        if 'element' in r :
-            #pass
-            print(o + ' -> ' + r)
-        else:
-            assert(o == r)
-        return r
+                return builder.getvalue()
 
 TamarinruleParser.TermContext.getText = termOverride
 
