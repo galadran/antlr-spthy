@@ -19,6 +19,8 @@ for s in tqdm(spthys):
 	contents = open(s,'r').read()
 	if "diffie-hellman" not in contents:
 		continue 
+	if "ifdef" in contents:
+		continue
 	if not wellFormed(s):
 		continue 
 	print(s)
