@@ -5,11 +5,12 @@ from antlr4 import *
 from .TamarinruleLexer import TamarinruleLexer
 from .TamarinruleParser import TamarinruleParser
 from .makeDH import TamarinruleVisitor
-from .makeDHParser import *
+
 
 def makeTree(input_stream):
 	lexer = TamarinruleLexer(input_stream)
 	stream = CommonTokenStream(lexer)
+	from . import makeDHParser
 	parser = TamarinruleParser(stream)
 	tree = parser.rules()
 	return tree 

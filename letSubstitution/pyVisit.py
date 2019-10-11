@@ -7,6 +7,7 @@ from antlr4 import *
 def makeTree(input_stream):
 	lexer = TamarinruleLexer(input_stream)
 	stream = CommonTokenStream(lexer)
+	from . import substitutionParser 
 	parser = TamarinruleParser(stream)
 	tree = parser.rules()
 	return tree 
@@ -34,4 +35,4 @@ else:
 	from .TamarinruleLexer import TamarinruleLexer
 	from .TamarinruleParser import TamarinruleParser
 	from .letSubstitution import TamarinruleVisitor
-	from .substitutionParser import * 
+	

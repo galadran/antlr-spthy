@@ -32,11 +32,16 @@ def isConstant(t):
     #varIdentifier's are constant if start with $~ or ''
     if t.getChildCount() == 0:
         return True
-    if t.varIdentifier() is not None:
+    if 'varIdentifier' in dir(t) and t.varIdentifier() is not None:
+    #if t.varIdentifier() is not None:
         v = t.varIdentifier().getText()
         if v[0] not in ["'","$","~"]:
             return False
     else:
+        print("---Is constant?")
+        for i in range(len(list(t.getChildren()))):
+            print(getChildText(t,i))
+        print("---")
         for t in t.getChildren():
             if not isConstant(t):
                 return False
@@ -61,7 +66,9 @@ def makeVarElement(t):
 
 def transformTerm(ctx):
     if ctx.getChildCount() == 3:
+        print(getChildText(ctx,0))
         t = getChildText(ctx,1)
+        print(getChildText(ctx,2))
         if t == '^':
             if isConstant(ctx):
                 return makeConstantElement(ctx)

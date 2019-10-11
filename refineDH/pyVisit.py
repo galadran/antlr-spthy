@@ -5,11 +5,12 @@ from antlr4 import *
 from .TamarinruleLexer import TamarinruleLexer
 from .TamarinruleParser import TamarinruleParser
 from .refineDH import TamarinruleVisitor
-from .refineDHParser import *
+
 
 def makeTree(input_stream):
 	lexer = TamarinruleLexer(input_stream)
 	stream = CommonTokenStream(lexer)
+	from . import refineDHParser
 	parser = TamarinruleParser(stream)
 	tree = parser.rules()
 	return tree 
@@ -27,6 +28,7 @@ def run(stream):
 	while str(old) != str(new):
 		old = new
 		new = InputStream(makeTransform(old))
+		print(new)
 		i += 1 
 		if i > 10:
 			print("Error, loop limit reached whilst converting")
