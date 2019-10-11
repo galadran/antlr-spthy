@@ -1,4 +1,4 @@
-import TamarinruleParser
+from .TamarinruleParser import TamarinruleParser
 from io import StringIO
 
 def protoOverride(self):

@@ -5,7 +5,7 @@ from antlr4 import *
 from .TamarinruleLexer import TamarinruleLexer
 from .TamarinruleParser import TamarinruleParser
 from .makeDH import TamarinruleVisitor
-import refineDHParser
+from .refineDHParser import * 
 
 def makeTree(input_stream):
 	lexer = TamarinruleLexer(input_stream)
