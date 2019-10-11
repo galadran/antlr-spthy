@@ -32,6 +32,11 @@ def isConstant(t):
     #varIdentifier's are constant if start with $~ or ''
     if t.getChildCount() == 0:
         return True
+    if t.Identifier() is not None and t.termList() is not None:
+        # Assuming that any function used in the exponent maps 
+        # to curve elements in the prime order subgroup
+        print("Warning - Function used in the exponent")
+        return True
     if t.varIdentifier() is not None:
         v = t.varIdentifier().getText()
         if v[0] not in ["'","$","~"]:
@@ -63,6 +68,7 @@ def transformTerm(ctx):
     if ctx.getChildCount() == 3:
         t = getChildText(ctx,1)
         if t == '^':
+            print("Transforming: "+getChildText(ctx,0)+'^'+getChildText(ctx,2))
             if isConstant(ctx):
                 return makeConstantElement(ctx)
             else:

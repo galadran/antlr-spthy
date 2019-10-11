@@ -68,9 +68,23 @@ class TamarinruleVisitor(ParseTreeVisitor):
             return True 
 
         def clean(t):
-            return t.replace('~',"sF").replace('$',"sC").replace("'",'sP')
+            replacements = {
+                '~' : "sF",
+                "$" : "sP",
+                "'" : "sP",
+                "(" : "sLB",
+                ")" : "sRB"
+            }
+            for (k,v) in replacements.items():
+                t = t.replace(k,v)
+            return t
 
         def isTermAtomic(c):
+            print(c.getText())
+            #print(dir(c))
+            if c.Identifier() is not None and c.termList is not None:
+                print("Overrode!")
+                return True
             return c.getChild(0).getText()[0] in ["'","~","$"]
 
         def getNewAdvVar(av,e):

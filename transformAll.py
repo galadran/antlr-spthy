@@ -21,6 +21,7 @@ for s in tqdm(spthys):
 		continue 
 	if not wellFormed(s):
 		continue 
+	print(s)
 	transformed = transformSpthy(contents)
 	output_location = s.replace(".spthy","_converted.spthy")
 	output = open(output_location,'w')

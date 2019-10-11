@@ -9,11 +9,12 @@ def transformSpthy(s):
 	try:
 		rulesT = convert(InputStream(rules))
 	except Exception as E:
-		print(rules)
+		#print(rules)
 
 		print('---')
 		print_exc()
 		exit(-1)
+	rulesT = 'functions: element/3, grpid/0\n' + str(rulesT)
 	newpt = pt.replace('\n RULESUBHERE \n',str(rulesT))
 	return newpt
 

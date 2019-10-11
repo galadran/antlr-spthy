@@ -34,7 +34,7 @@ def genericOverride(self):
             return 'In('+s[2]+')'
 
         def getAction(s):
-            return "raised('G'," + s[1]+','+s[2]+','+ s[3]+ ')'
+            return "Raised('G'," + s[1]+','+s[2]+','+ s[3]+ ')'
 
         r = ''
         if state is None:
