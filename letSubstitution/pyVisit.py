@@ -20,7 +20,7 @@ if __name__ == '__main__':
 	from TamarinruleLexer import TamarinruleLexer
 	from TamarinruleParser import TamarinruleParser
 	from letSubstitution import TamarinruleVisitor
-	import substitutionParser
+	from substitutionParser import * 
 	f = FileStream(sys.argv[1])
 	r1 = run(f)
 
@@ -34,4 +34,4 @@ else:
 	from .TamarinruleLexer import TamarinruleLexer
 	from .TamarinruleParser import TamarinruleParser
 	from .letSubstitution import TamarinruleVisitor
-	import substitutionParser
+	from .substitutionParser import * 

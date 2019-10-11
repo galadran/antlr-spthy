@@ -1,6 +1,6 @@
 # Generated from Tamarinrule.g4 by ANTLR 4.7.2
 # encoding: utf-8
-import TamarinruleParser
+from .TamarinruleParser import TamarinruleParser
 from io import StringIO
 
 def protoOverride(self):
@@ -16,7 +16,7 @@ def protoOverride(self):
                 builder.write(" ")
         return builder.getvalue()
 
-TamarinruleParser.TamarinruleParser.ProtoRuleContext.getText = protoOverride
+TamarinruleParser.ProtoRuleContext.getText = protoOverride
 
 def genericOverride(self):
     if self.getChildCount() == 0:
@@ -27,4 +27,4 @@ def genericOverride(self):
         builder.write("\n")
         return builder.getvalue()
 
-TamarinruleParser.TamarinruleParser.GenericRuleContext.getText = genericOverride
+TamarinruleParser.GenericRuleContext.getText = genericOverride
