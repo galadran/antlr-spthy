@@ -42,7 +42,7 @@ rule advsetup: //Proof of posessesion check
 
 rule Init1:
 	let
-		iDH = 'g'^~x
+		iDH = ('g')^~x
 	in
 	[!Role(~id,~st),!Cert(~resp,rPk),Fr(~x)]
 	-->
