@@ -30,9 +30,11 @@ factList : (fact (',' fact)*)?;
 
 term : '<' termList '>'
      | term '^' term
+     | term '+' term
      | varIdentifier
      | Identifier '(' termList  ')'
      | '(' term ')'
+     | Identifier '{' termList '}' term 
      ;
 
 termList : (term (',' term)*)?;
