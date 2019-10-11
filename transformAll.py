@@ -12,8 +12,10 @@ def wellFormed(spthy):
 
 target = sys.argv[1]
 # Glob all files
-spthys = glob(target+"**/*.spthy")
+spthys = glob(target+"**/*.spthy",recursive=True)
 for s in tqdm(spthys):
+	if '_converted.spthy' in s:
+		continue 
 	contents = open(s,'r').read()
 	if "diffie-hellman" not in contents:
 		continue 
@@ -23,8 +25,8 @@ for s in tqdm(spthys):
 	output_location = s.replace(".spthy","_converted.spthy")
 	output = open(output_location,'w')
 	output.write(transformed)
-	close(output)
-	if not wellformed(output_location):
+	output.close()
+	if not wellFormed(output_location):
 		print("Error: Transformed file is not well formed")
 		print(output_location)
 		exit(-1)
