@@ -2,18 +2,25 @@ from allTogether import transformSpthy
 from glob import glob 
 import sys
 from tqdm import tqdm
-from subprocess import check_output
+from subprocess import check_output, TimeoutExpired
 
 wellFormedMessage = "/* All well-formedness checks were successful. */"
 
 def wellFormed(spthy):
-	ret = check_output(['tamarin-prover','--quit-on-warning',spthy],timeout=60)
+	try:
+		ret = check_output(['tamarin-prover','--quit-on-warning',spthy],timeout=60)
+	except TimeoutExpired as E:
+		print("Timeout: " + spthy)
+		return False
 	return (wellFormedMessage in ret.decode("utf-8"))
 
 target = sys.argv[1]
 # Glob all files
 spthys = glob(target+"**/*.spthy",recursive=True)
 for s in tqdm(spthys):
+	if 'experiments/DJB.spthy' in s:
+		#Blacklisted due to dodgy use of exp
+		continue
 	if '_converted.spthy' in s:
 		continue 
 	contents = open(s,'r').read()
