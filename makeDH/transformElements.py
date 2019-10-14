@@ -50,6 +50,9 @@ def isConstant(t):
 def getVar(t):
     o = "" 
     for c in t:
+        if c in ['(',')']:
+            #Throw away brackets so that (x) and x become the same name.
+            continue
         if not (c.isalnum() or c == '_'):
             #The only other possible values are '()<>$ so 
             #no collisions possible?
@@ -76,6 +79,9 @@ def transformTerm(ctx):
                 if isAtomic(base):
                     o = makeVarElement(base) + getChildText(ctx,1) + getChildText(ctx,2)
                     k = base.getText(transform=False)
+                    if k[0] == '(' and k[-1] == ')':
+                        #Hacky way to trim brackets
+                        k = k[1:-1]
                     #print(k + ' := ' + makeVarElement(base))
                     ctx.parser.subs[k] = makeVarElement(base)
                     return  o
