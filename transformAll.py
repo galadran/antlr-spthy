@@ -2,16 +2,24 @@ from allTogether import transformSpthy
 from glob import glob 
 import sys
 from tqdm import tqdm
-from subprocess import check_output, TimeoutExpired
+from subprocess import check_output, TimeoutExpired, CalledProcessError,STDOUT
 
 wellFormedMessage = "/* All well-formedness checks were successful. */"
 
 def wellFormed(spthy):
 	try:
-		ret = check_output(['tamarin-prover','--quit-on-warning',spthy],timeout=60)
+		err=""
+		ret = check_output(['tamarin-prover','--quit-on-warning',spthy],timeout=60,stderr=STDOUT)
 	except TimeoutExpired as E:
 		print("Timeout: " + spthy)
 		return False
+	except CalledProcessError as E:
+		if 'diff operator found, but flag diff not set' in E.output.decode("utf-8"):
+			return False
+		else:
+			print(E.output.decode("utf-8"))
+			print(E)
+			exit(-1)
 	return (wellFormedMessage in ret.decode("utf-8"))
 
 target = sys.argv[1]
@@ -20,6 +28,12 @@ spthys = glob(target+"**/*.spthy",recursive=True)
 for s in tqdm(spthys):
 	if 'experiments/DJB.spthy' in s:
 		#Blacklisted due to dodgy use of exp
+		continue
+	elif 'features/xor/' in s:
+		#TODO Consider implementing
+		continue
+	elif 'examples/cav13/DH_example.spthy' in s:
+		# Uses : sorts.
 		continue
 	if '_converted.spthy' in s:
 		continue 
