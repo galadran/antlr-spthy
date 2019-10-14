@@ -59,22 +59,26 @@ def getVar(t):
     return o
 
 def makeConstantElement(t):
-    return "element('G',grpid,"+t.getText(transform=False)+')'
+    return "element('G_grp',grpid,"+t.getText(transform=False)+')'
 
 def makeVarElement(t):
-    return "element('G',"+getVar("adv"+t.getText(transform=False))+","+getVar(t.getText(transform=False))+')'
+    return "element('G_grp',"+getVar("adv"+t.getText(transform=False))+","+getVar(t.getText(transform=False))+')'
 
 def transformTerm(ctx):
     if ctx.getChildCount() == 3:
         t = getChildText(ctx,1)
         if t == '^':
-            print("Transforming: "+getChildText(ctx,0)+'^'+getChildText(ctx,2))
+            #print("Transforming: "+getChildText(ctx,0)+'^'+getChildText(ctx,2))
             if isConstant(ctx):
                 return makeConstantElement(ctx)
             else:
                 base = ctx.getChild(0)
                 if isAtomic(base):
-                    return makeVarElement(base) + getChildText(ctx,1) + getChildText(ctx,2) 
+                    o = makeVarElement(base) + getChildText(ctx,1) + getChildText(ctx,2)
+                    k = base.getText(transform=False)
+                    #print(k + ' := ' + makeVarElement(base))
+                    ctx.parser.subs[k] = makeVarElement(base)
+                    return  o
     with StringIO() as builder:
         for child in ctx.getChildren():
             if type(child) == type(ctx):

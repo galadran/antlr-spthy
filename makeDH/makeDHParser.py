@@ -37,14 +37,21 @@ def termOverride(self,transform=True):
                     builder.write(child.getText())
             return builder.getvalue()
     if transform:
+        if 'subs' not in dir(self.parser):
+            self.parser.subs = dict()
         from .transformElements import transformTerm
         o = self.getText(transform=False)
         r = transformTerm(self)
         if 'element' in r :
-            #pass
-            print(o + ' -> ' + r)
+            pass
+            #print(o + ' -> ' + r)
+            #self.parser.subs[o] = r
         else:
             assert(o == r)
+            if o in self.parser.subs.keys():
+                #print("Using cache")
+                r = self.parser.subs[o]
+                #print(o + ' --> ' + r)
         return r
 
 TamarinruleParser.TermContext.getText = termOverride

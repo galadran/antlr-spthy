@@ -9,7 +9,7 @@ from letSubstitution.pyVisit import run as letSub
 def convert(stream):
 	subbed = letSub(stream)
 	based = baseExp(InputStream(subbed))
-	print(based)
+	#print(based)
 	refined = refineExp(InputStream(based))
 	return refined 
 

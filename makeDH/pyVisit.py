@@ -18,6 +18,7 @@ def makeTree(input_stream):
 def run(stream):
 	t = makeTree(stream)
 	v = TamarinruleVisitor()
+	v.visit(t)
 	return v.visit(t)
  
 if __name__ == '__main__':
