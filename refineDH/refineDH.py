@@ -1,6 +1,8 @@
 # Generated from Tamarinrule.g4 by ANTLR 4.7.2
 from antlr4 import *
+
 from .TamarinruleParser import TamarinruleParser
+
 
 # This class defines a complete generic visitor for a parse tree produced by TamarinruleParser.
 
@@ -10,6 +12,7 @@ class TamarinruleVisitor(ParseTreeVisitor):
     def visitRules(self, ctx:TamarinruleParser.RulesContext):
         ctx.parser.substitutions = dict()
         self.visitChildren(ctx)
+        #print(ctx.parser.substitutions)
         return ctx.getText()
 
     # Visit a parse tree produced by TamarinruleParser#protoRule.
@@ -73,15 +76,20 @@ class TamarinruleVisitor(ParseTreeVisitor):
                 "$" : "sP",
                 "'" : "sP",
                 "(" : "sLB",
-                ")" : "sRB"
+                ")" : "sRB",
+                '_' : "UND"
             }
             for (k,v) in replacements.items():
                 t = t.replace(k,v)
             return t
 
         def isTermAtomic(c):
-            print(c.getText())
+            #print(c.getText())
             #print(dir(c))
+            #for child in c.getChildren():
+                #print(child.getText())
+            if c.getChild(0).getText() == '(':
+                return isTermAtomic(c.getChild(1))
             if c.Identifier() is not None and c.termList is not None:
                 print("Overrode!")
                 return True
@@ -95,7 +103,6 @@ class TamarinruleVisitor(ParseTreeVisitor):
 
 
         if isElementExpSite(ctx):
-
             k = ctx.getSourceInterval()
             if k not in ctx.parser.substitutions.keys():
                 ctx.parser.substitutions[k] = ""
@@ -106,17 +113,19 @@ class TamarinruleVisitor(ParseTreeVisitor):
                 NadvVar = getNewAdvVar(advVar,exp)
                 Nbase = base.getText() + '^'+exp.getText()
                 ctx.parser.substitutions[self.currentRule].add(
-                    ('G',
+                    ('G_grp',
                     advVar.getText(),
                     NadvVar,
                     exp.getText(),
                     Nbase))
-                ctx.parser.substitutions[k] = "element('G',"+NadvVar+','+Nbase+')'
+                ctx.parser.substitutions[k] = "element('G_grp',"+NadvVar+','+Nbase+')'
+                print("Handling exp operation: " +base.getText() + '^'+exp.getText())
             else:
                 #Move the exponent inside and rename the variables
+                print("Compressing exp variables: " +base.getText() + '^'+exp.getText())
                 NadvVar = getNewAdvVar(advVar,exp)
                 Nbase = getNewBase(base,exp)
-                ctx.parser.substitutions[k] = "element('G',"+NadvVar+','+Nbase+')'
+                ctx.parser.substitutions[k] = "element('G_grp',"+NadvVar+','+Nbase+')'
         else:
             # Don't descent if we did a substitution here. 
             return self.visitChildren(ctx)

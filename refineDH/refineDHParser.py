@@ -1,4 +1,5 @@
 from .TamarinruleParser import TamarinruleParser
+#from TamarinruleParser import TamarinruleParser
 from io import StringIO
 
 def protoOverride(self):
@@ -34,7 +35,7 @@ def genericOverride(self):
             return 'In('+s[2]+')'
 
         def getAction(s):
-            return "Raised('G'," + s[1]+','+s[2]+','+ s[3]+ ')'
+            return "Raised('G_grp'," + s[1]+','+s[2]+','+ s[3]+ ')'
 
         r = ''
         if state is None:
