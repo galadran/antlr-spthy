@@ -77,7 +77,10 @@ class TamarinruleVisitor(ParseTreeVisitor):
                 "'" : "sP",
                 "(" : "sLB",
                 ")" : "sRB",
-                '_' : "UND"
+                '_' : "UND",
+                '<' : "sT",
+                '>' : "sT",
+                ',' : "sC"
             }
             for (k,v) in replacements.items():
                 t = t.replace(k,v)
@@ -91,7 +94,6 @@ class TamarinruleVisitor(ParseTreeVisitor):
             if c.getChild(0).getText() == '(':
                 return isTermAtomic(c.getChild(1))
             if c.Identifier() is not None and c.termList is not None:
-                print("Overrode!")
                 return True
             return c.getChild(0).getText()[0] in ["'","~","$"]
 
