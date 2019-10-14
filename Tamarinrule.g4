@@ -31,6 +31,8 @@ factList : (fact (',' fact)*)?;
 term : '<' termList '>'
      | term '^' term
      | term '+' term
+     | term 'XOR' term
+     | term '⊕' term
      | varIdentifier
      | Identifier '(' termList  ')'
      | '(' term ')'
