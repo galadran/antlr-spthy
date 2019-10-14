@@ -18,8 +18,18 @@ def makeTree(input_stream):
 def run(stream):
 	t = makeTree(stream)
 	v = TamarinruleVisitor()
-	v.visit(t)
-	return v.visit(t)
+	old = ''
+	new = v.visit(t)
+	i = 0
+	while old != new and i < 10:
+		old = new
+		new = v.visit(t)
+		print(t.parser.subs)
+		i+= 1
+	if i >= 10:
+		print("Loop limit reached in makeDH")
+		exit(-1)
+	return new
  
 if __name__ == '__main__':
 	f = FileStream(sys.argv[1])
