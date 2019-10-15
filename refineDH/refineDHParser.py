@@ -29,6 +29,18 @@ def termOverride(self,transform=True):
 
 TamarinruleParser.TermContext.getText = termOverride
 
+def factListOverride(self):
+            if self.getChildCount() == 0:
+                return ""
+            with StringIO() as builder:
+                for child in self.getChildren():
+                    builder.write(child.getText())
+                    if child.getText() == ',':
+                        builder.write('\n')
+                return builder.getvalue()
+
+TamarinruleParser.FactListContext.getText = factListOverride
+
 def genericOverride(self):
     def amendList(state,prev,subs):
         def getIn(s):
