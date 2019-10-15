@@ -14,7 +14,20 @@ def transformSpthy(s):
 		print('---')
 		print_exc()
 		exit(-1)
-	rulesT = 'functions: element/3, grpid/0\n' + str(rulesT)
+	rulesT = """
+	functions: element/3, extract_element/1
+	equations: extract_element(element(t,s,n)) = n
+	""" + str(rulesT) + """
+	restriction Consistency:
+	        "All  t s r1 r2 y #i #j .
+	        Raised(t,s,r1,y) @ i & Raised(t,s,r2,y) @j
+	        ==> r1 = r2"
+
+	restriction Identity:
+	        "All  t r y #i .
+	        Raised(t,grpid,r,y) @ i ==> r = grpid"
+
+	"""
 	newpt = pt.replace('\n RULESUBHERE \n',str(rulesT))
 	return newpt
 
