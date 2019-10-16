@@ -3,6 +3,8 @@ from glob import glob
 import sys
 from tqdm import tqdm
 from subprocess import check_output, TimeoutExpired, CalledProcessError,STDOUT
+from os import makedirs 
+from pathlib import Path
 
 wellFormedMessage = "/* All well-formedness checks were successful. */"
 
@@ -23,6 +25,23 @@ def wellFormed(spthy):
 	return (wellFormedMessage in ret.decode("utf-8"))
 
 target = sys.argv[1]
+tPath = Path(target)
+
+def getOutputLocation(tPath,sPath):
+	nPath = []
+	flag = False
+	for e in sPath.parts:
+		if e in tPath.parts:
+			nPath.append(e)
+		elif e not in tPath.parts and not flag:
+			flag = True 
+			nPath.append("converted")
+			nPath.append(e)
+		elif e not in tPath.parts and flag:
+			nPath.append(e)
+	makedirs("/".join(nPath[:-1])[1:],exist_ok=True)
+	return "/".join(nPath)[1:]
+
 # Glob all files
 spthys = glob(target+"**/*.spthy",recursive=True)
 for s in tqdm(spthys):
@@ -46,6 +65,8 @@ for s in tqdm(spthys):
 		continue 
 	transformed = transformSpthy(contents)
 	output_location = s.replace(".spthy","_converted.spthy")
+	output_location = getOutputLocation(tPath,Path(output_location))
+	print(output_location)
 	output = open(output_location,'w')
 	output.write(transformed)
 	output.close()
