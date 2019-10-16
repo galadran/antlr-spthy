@@ -8,10 +8,10 @@ from pathlib import Path
 
 wellFormedMessage = "/* All well-formedness checks were successful. */"
 
-def wellFormed(spthy):
+def wellFormed(spthy,timeout=60):
 	try:
 		err=""
-		ret = check_output(['tamarin-prover','--quit-on-warning',spthy],timeout=60,stderr=STDOUT)
+		ret = check_output(['tamarin-prover','--quit-on-warning',spthy],timeout=timeout,stderr=STDOUT)
 	except TimeoutExpired as E:
 		print("Timeout: " + spthy)
 		return False
@@ -65,7 +65,7 @@ for s in tqdm(spthys):
 		continue 
 	if "ifdef" in contents:
 		continue
-	if not wellFormed(s):
+	if not wellFormed(s,timeout=120):
 		continue 
 	transformed = transformSpthy(contents)
 	output_location = s.replace(".spthy","_converted.spthy")
@@ -74,7 +74,7 @@ for s in tqdm(spthys):
 	output = open(output_location,'w')
 	output.write(transformed)
 	output.close()
-	if not wellFormed(output_location):
+	if not wellFormed(output_location,timeout=240):
 		print("Error: Transformed file is not well formed")
 		print(output_location)
 		exit(-1)
