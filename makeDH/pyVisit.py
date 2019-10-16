@@ -24,7 +24,7 @@ def run(stream):
 	while old != new and i < 10:
 		old = new
 		new = v.visit(t)
-		print(t.parser.subs)
+		#print(t.parser.subs)
 		i+= 1
 	if i >= 10:
 		print("Loop limit reached in makeDH")
