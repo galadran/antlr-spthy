@@ -51,6 +51,8 @@ for s in tqdm(spthys):
 	elif 'features/xor/' in s:
 		#TODO Consider implementing
 		continue
+	elif 'features/equivalence/future/' in s:
+		continue
 	elif 'examples/Tutorial' in s:
 		continue
 	elif 'DH_Message_Deduction' in s:
