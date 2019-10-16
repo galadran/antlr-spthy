@@ -51,6 +51,8 @@ for s in tqdm(spthys):
 	elif 'features/xor/' in s:
 		#TODO Consider implementing
 		continue
+	elif 'examples/Tutorial' in s:
+		continue
 	elif 'examples/cav13/DH_example.spthy' in s:
 		# Uses : sorts.
 		continue
