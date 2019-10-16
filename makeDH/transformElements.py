@@ -35,7 +35,7 @@ def isConstant(t):
     if t.Identifier() is not None and t.termList() is not None:
         # Assuming that any function used in the exponent maps 
         # to curve elements in the prime order subgroup
-        print("Warning - Function used in the exponent")
+        #print("Warning - Function used in the exponent")
         return True
     if t.varIdentifier() is not None:
         v = t.varIdentifier().getText()

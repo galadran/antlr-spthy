@@ -121,10 +121,10 @@ class TamarinruleVisitor(ParseTreeVisitor):
                     exp.getText(),
                     Nbase))
                 ctx.parser.substitutions[k] = "element('G_grp',"+NadvVar+','+Nbase+')'
-                print("Handling exp operation: " +base.getText() + '^'+exp.getText())
+                #print("Handling exp operation: " +base.getText() + '^'+exp.getText())
             else:
                 #Move the exponent inside and rename the variables
-                print("Compressing exp variables: " +base.getText() + '^'+exp.getText())
+                #print("Compressing exp variables: " +base.getText() + '^'+exp.getText())
                 NadvVar = getNewAdvVar(advVar,exp)
                 Nbase = getNewBase(base,exp)
                 ctx.parser.substitutions[k] = "element('G_grp',"+NadvVar+','+Nbase+')'
