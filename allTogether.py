@@ -29,6 +29,15 @@ def transformSpthy(s):
 		        "All  t r y #i .
 		        Raised(t,grpid,r,y) @ i ==> r = grpid"
 
+		lemma leakage:
+			"
+			not Ex t1 l1 r1 t2 l2 r2 y #i #j .
+			Raised(t1,l1,r1,y) @ i &
+			Raised(t2,l2,r2,y) @ j &
+			(not t1 = t2) &
+			(not r1 = grpid) &
+			(not r2 = grpid ) "
+
 		"""
 	newpt = pt.replace('\n RULESUBHERE \n',str(rulesT))
 	return newpt
