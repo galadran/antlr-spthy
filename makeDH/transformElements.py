@@ -65,7 +65,8 @@ def makeConstantElement(t):
     return "element('G_grp',grpid,"+t.getText(transform=False)+')'
 
 def makeVarElement(t):
-    return "element('G_grp',"+getVar("adv"+t.getText(transform=False))+","+getVar(t.getText(transform=False))+')'
+    #return "element('G_grp',"+getVar("adv"+t.getText(transform=False))+","+getVar(t.getText(transform=False))+')'
+    return "element('G_grp',"+'gripid'+","+getVar(t.getText(transform=False))+')'
 
 def transformTerm(ctx):
     if ctx.getChildCount() == 3:
