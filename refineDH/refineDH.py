@@ -112,22 +112,22 @@ class TamarinruleVisitor(ParseTreeVisitor):
             advVar,base = extractTerms(ctx)
             exp = extractExponent(ctx)
             if isTermAtomic(exp):
-                NadvVar = getNewAdvVar(advVar,exp)
+                #NadvVar = getNewAdvVar(advVar,exp)
                 Nbase = base.getText() + '^'+exp.getText()
                 ctx.parser.substitutions[self.currentRule].add(
                     ('G_grp',
-                    advVar.getText(),
-                    NadvVar,
+                    'grpid',#advVar.getText(),
+                    'grpid',#NadvVar,
                     exp.getText(),
                     Nbase))
-                ctx.parser.substitutions[k] = "element('G_grp',"+NadvVar+','+Nbase+')'
+                ctx.parser.substitutions[k] = "element('G_grp',"+'grpid'+','+Nbase+')'
                 #print("Handling exp operation: " +base.getText() + '^'+exp.getText())
             else:
                 #Move the exponent inside and rename the variables
                 #print("Compressing exp variables: " +base.getText() + '^'+exp.getText())
-                NadvVar = getNewAdvVar(advVar,exp)
+                #NadvVar = getNewAdvVar(advVar,exp)
                 Nbase = getNewBase(base,exp)
-                ctx.parser.substitutions[k] = "element('G_grp',"+NadvVar+','+Nbase+')'
+                ctx.parser.substitutions[k] = "element('G_grp',"+'grpid'+','+Nbase+')'
         else:
             # Don't descent if we did a substitution here. 
             return self.visitChildren(ctx)
